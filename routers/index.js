@@ -1,7 +1,7 @@
-import itemRouter from "./routers/item.js";
-import categoryRouter from "./routers/category.js"
-import reviewRouter from "./routers/review.js"
-import wishListRouter from "./routers/wishList.js"
+import itemRouter from "./routes/item.js";
+import categoryRouter from "./routes/category.js"
+import reviewRouter from "./routes/review.js"
+import wishListRouter from "./routes/wishList.js"
 
 function routers(app) {
     app.use("/items", itemRouter);

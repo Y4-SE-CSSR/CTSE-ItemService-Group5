@@ -9,34 +9,21 @@ const ItemSchema = new Schema({
     },
     description: {
         type: String,
-        required: true
+        required: true,
+        minlength: 10
     },
     price: {
         type: Number,
-        required: true
-    },
-    image: {
-        type: String,
         required: true,
-    },
-    category: {
-        type: String,
-        required: true
+        min: 0
     },
     brand: {
         type: String,
         required: true
     },
-    sellerID: {
-        type: String,
-        required: true
-    },
-    rating: {
-        type: Number,
-        default: 0
-    },
-    quantity: {
-        type: Number,
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: "Category",
         required: true
     },
 }, {
@@ -45,6 +32,8 @@ const ItemSchema = new Schema({
         updatedAt: 'updatedOn'
     }
 });
+
+ItemSchema.index({ category: 1 });
 
 const Item = mongoose.model("Item", ItemSchema);
 
