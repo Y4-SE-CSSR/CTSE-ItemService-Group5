@@ -3,36 +3,26 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const ReviewSchema = new Schema({
-    buyerFname: {
-        type: String,
-        required: true
-    },
-    buyerLname: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
+    item: {
+        type: Schema.Types.ObjectId,
+        ref: "Item",
         required: true
     },
     rating: {
         type: Number,
-        required: true
+        required: true,
+        min: 1,
+        max: 5
     },
-    itemID: {
-        type: String,
-        required: true
-    },
-    buyerID: {
+    comment: {
         type: String,
         required: true
     },
 }, {
-    timestamps: {
-        createdAt: 'createdOn',
-        updatedAt: 'updatedOn'
-    }
+    timestamps: true
 });
+
+ReviewSchema.index({ item: 1 });
 
 const Review = mongoose.model("Review", ReviewSchema);
 

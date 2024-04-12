@@ -6,18 +6,23 @@ const CategorySchema = new Schema({
     name: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        minlength: 2,
+        maxlength: 50
     },
-    image: {
+    description: {
         type: String,
-        required: true
-    },
+        required: true,
+        minlength: 10
+    }
 }, {
     timestamps: {
         createdAt: 'createdOn',
         updatedAt: 'updatedOn'
     }
 });
+
+CategorySchema.index({ name: 1 });
 
 const Category = mongoose.model("Category", CategorySchema);
 
