@@ -24,7 +24,7 @@ jobs:
       - name: Run tests
         run: npm test
 
-  deploy:
+  docker-deploy:
     runs-on: ubuntu-latest
     needs: build
     steps:
