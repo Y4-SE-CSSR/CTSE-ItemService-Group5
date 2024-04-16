@@ -27,7 +27,7 @@ jobs:
 
   Dockerize:
     runs-on: ubuntu-latest
-    needs: build
+    needs: BuildandTest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
