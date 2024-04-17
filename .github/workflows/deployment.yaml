@@ -111,10 +111,10 @@ jobs:
 
       - name: Login to Azure Container Registry
         run: az acr login --name ${{ secrets.AZURE_ACR_NAME }}
-          
+
       - name: Pull Docker image from Docker Hub
         run: docker pull randula98/ctse-itemservice:1.0.0
-        
+
       - name: Tag Docker image
         run: docker tag randula98/ctse-itemservice:1.0.0 ${{ secrets.AZURE_ACR_NAME }}.azurecr.io/ctse-itemservice:1.0.0
 
@@ -122,21 +122,13 @@ jobs:
         run: docker push ${{ secrets.AZURE_ACR_NAME }}.azurecr.io/ctse-itemservice:1.0.0
 
       - name: Azure Provider Register
-        run:
-          az provider register --namespace Microsoft.Insights
-
-      - name: Create Azure Kubernetes Cluster
-        run:
-          az aks create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }} --node-count 1 --enable-addons monitoring --generate-ssh-keys
+        run: az provider register --namespace Microsoft.Insights
 
       - name: Get Azure Kubernetes Cluster credentials
         run: az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }}
 
       - name: Deploy to Azure Kubernetes Cluster
-        run: kubectl apply -f kubernetes/deployment.yaml
-
-      - name: Expose service
-        run: kubectl expose deployment item-service-deployment --type=LoadBalancer --port=8080 --target-port=8080
+        run: kubectl apply -f kubernetes/
 
       - name: Get service IP
         run: kubectl get service item-service-deployment
