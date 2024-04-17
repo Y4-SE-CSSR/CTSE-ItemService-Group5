@@ -93,8 +93,10 @@ jobs:
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
       - name: Login to Azure
-        run: |
-          echo "${{ secrets.AZURE_CREDENTIALS }}" | az login --service-principal --tenant ${{ secrets.TENANT_ID }} -u ${{ secrets.CLIENT_ID }} --password -
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
 
       - name: Run Azure commands
         run: |
