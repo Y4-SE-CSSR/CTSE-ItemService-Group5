@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: item-service-deployment
+  labels:
+    app: item-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: item
+  template:
+    metadata:
+      labels:
+        app: item
+    spec:
+      containers:
+        - name: item
+          image: randula98/ctse-itemservice:1.0.0
+          ports:
+            - containerPort: 8083
