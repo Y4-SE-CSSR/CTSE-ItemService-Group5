@@ -124,41 +124,14 @@ jobs:
       - name: Azure Provider Register
         run: az provider register --namespace Microsoft.Insights
 
-      - name: Check AKS Cluster Availability
-        id: check_cluster
-        env:
-          AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
-          AKS_NAME: ${{ secrets.AZURE_AKS_NAME }}
-        run: |
-          cluster_info=$(az aks show --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AKS_NAME }} 2>&1)
-          if [[ $? -eq 0 ]]; then
-            echo "AKS cluster '${{ env.AKS_NAME }}' exists."
-            echo "::set-output name=cluster_exists::true"
-          else
-            echo "AKS cluster '${{ env.AKS_NAME }}' does not exist."
-            echo "::set-output name=cluster_exists::false"
-          fi
-
-      - name: Delete AKS Cluster if exists
-        if: steps.check_cluster.outputs.cluster_exists == 'true'
-        env:
-          AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
-          AKS_NAME: ${{ secrets.AZURE_AKS_NAME }}
-        run: |
-          az aks delete --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AKS_NAME }} --yes
-
       - name: Create AKS Cluster
-        env:
-          AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
-          AKS_NAME: ${{ secrets.AZURE_AKS_NAME }}
-        run: |
-          az aks create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AKS_NAME }} --node-count 1 --enable-addons monitoring --generate-ssh-keys
+        run: az aks create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }}--node-count 1 --enable-addons monitoring --generate-ssh-keys
 
       - name: Get Azure Kubernetes Cluster credentials
         run: az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }}
 
       - name: Deploy to Azure Kubernetes Cluster
-        run: kubectl apply -f kubernetes/deployment.yaml
+        run: kubectl apply -f kubernetes/
 
       - name: Expose service
         run: kubectl expose deployment item-service-deployment --type=LoadBalancer --port=8080 --target-port=8080
