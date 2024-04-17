@@ -125,10 +125,28 @@ jobs:
         run:
           az provider register --namespace Microsoft.Insights
 
-      - name: Create Azure Kubernetes Cluster
-        run:
-          az aks create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }} --node-count 1 --enable-addons monitoring --generate-ssh-keys
-
+      - name: Check AKS Cluster Availability
+        id: check_cluster
+        env:
+          AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          AKS_NAME: ${{ secrets.AZURE_AKS_NAME }}
+        run: |
+          cluster_info=$(az aks show --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AKS_NAME }} 2>&1)
+          if [[ $? -eq 0 ]]; then
+            echo "AKS cluster '${{ env.AKS_NAME }}' exists."
+            echo "::set-output name=cluster_exists::true"
+          else
+            echo "AKS cluster '${{ env.AKS_NAME }}' does not exist."
+            echo "::set-output name=cluster_exists::false"
+          fi
+          
+      - name: Create AKS Cluster if not available
+        if: steps.check_cluster.outputs.cluster_exists == 'false'
+        env:
+          AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          AKS_NAME: ${{ secrets.AZURE_AKS_NAME }}
+        run: |
+          az aks create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AKS_NAME }} --node-count 1 --enable-addons monitoring --generate-ssh-keys
       - name: Get Azure Kubernetes Cluster credentials
         run: az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }}
 
