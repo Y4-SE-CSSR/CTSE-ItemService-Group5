@@ -109,9 +109,6 @@ jobs:
 
       - name: Login to Azure Container Registry
         run: az acr login --name ${{ secrets.AZURE_ACR_NAME }}
-
-      - name: Pull Docker image from Docker Hub
-        run: docker pull randula98/ctse-itemservice:1.0.0
           
       - name: Tag Docker image
         run: docker tag randula98/ctse-itemservice:1.0.0 ${{ secrets.AZURE_ACR_NAME }}.azurecr.io/ctse-itemservice:1.0.0
