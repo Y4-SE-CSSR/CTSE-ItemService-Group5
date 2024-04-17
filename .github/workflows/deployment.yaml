@@ -121,9 +121,12 @@ jobs:
       - name: Push Docker image to Azure Container Registry
         run: docker push ${{ secrets.AZURE_ACR_NAME }}.azurecr.io/ctse-itemservice:1.0.0
 
-      - name: Create Azure Kubernetes Cluster
+      - name: Azure Provider Register
         run:
           az provider register --namespace Microsoft.Insights
+
+      - name: Create Azure Kubernetes Cluster
+        run:
           az aks create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }} --node-count 1 --enable-addons monitoring --generate-ssh-keys
 
       - name: Get Azure Kubernetes Cluster credentials
