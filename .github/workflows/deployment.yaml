@@ -80,3 +80,63 @@ jobs:
 
       - name: Run Docker container
         run: docker run -d --name ctse-itemservice -p 8080:8080 randula98/ctse-itemservice:1.0.0
+
+  DeploytoAzureKS:
+    runs-on: ubuntu-latest
+    needs: Dockerize
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+      - name: Login to Azure
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - name: Run Azure commands
+        run: |
+          az account show
+          az group list
+
+      - name: Set Azure subscription
+        run: az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Create Azure Container Registry
+        run: az acr create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_ACR_NAME }} --sku Basic
+
+      - name: Login to Azure Container Registry
+        run: az acr login --name ${{ secrets.AZURE_ACR_NAME }}
+          
+      - name: Pull Docker image from Docker Hub
+        run: docker pull randula98/ctse-itemservice:1.0.0
+        
+      - name: Tag Docker image
+        run: docker tag randula98/ctse-itemservice:1.0.0 ${{ secrets.AZURE_ACR_NAME }}.azurecr.io/ctse-itemservice:1.0.0
+
+      - name: Push Docker image to Azure Container Registry
+        run: docker push ${{ secrets.AZURE_ACR_NAME }}.azurecr.io/ctse-itemservice:1.0.0
+
+      - name: Azure Provider Register
+        run:
+          az provider register --namespace Microsoft.Insights
+
+      - name: Create Azure Kubernetes Cluster
+        run:
+          az aks create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }} --node-count 1 --enable-addons monitoring --generate-ssh-keys
+
+      - name: Get Azure Kubernetes Cluster credentials
+        run: az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }}
+
+      - name: Deploy to Azure Kubernetes Cluster
+        run: kubectl apply -f kubernetes/deployment.yaml
+
+      - name: Expose service
+        run: kubectl expose deployment item-service-deployment --type=LoadBalancer --port=8080 --target-port=8080
+
+      - name: Get service IP
+        run: kubectl get service item-service-deployment
