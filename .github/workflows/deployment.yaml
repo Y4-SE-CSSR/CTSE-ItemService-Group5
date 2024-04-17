@@ -79,4 +79,4 @@ jobs:
         run: docker push randula98/ctse-itemservice:1.0.0
 
       - name: Run Docker container
-        run: docker run -d --name my-microservice -p 8080:8080 randula98/ctse-itemservice:1.0.0
+        run: docker run -d --name ctse-itemservice -p 8080:8080 randula98/ctse-itemservice:1.0.0
