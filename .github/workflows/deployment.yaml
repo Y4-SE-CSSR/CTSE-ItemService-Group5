@@ -106,9 +106,6 @@ jobs:
       - name: Set Azure subscription
         run: az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Create Azure Container Registry
-        run: az acr create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_ACR_NAME }} --sku Basic
-
       - name: Login to Azure Container Registry
         run: az acr login --name ${{ secrets.AZURE_ACR_NAME }}
 
@@ -124,17 +121,11 @@ jobs:
       - name: Azure Provider Register
         run: az provider register --namespace Microsoft.Insights
 
-      - name: Create Azure Kubernetes Cluster
-        run: az aks create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }} --node-count 1 --enable-addons monitoring --generate-ssh-keys
-
       - name: Get Azure Kubernetes Cluster credentials
         run: az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }}
 
       - name: Deploy to Azure Kubernetes Cluster
         run: kubectl apply -f kubernetes/
-
-      - name: Expose service
-        run: kubectl expose deployment item-service-deployment --type=LoadBalancer --port=8080 --target-port=8080
 
       - name: Get service IP
         run: kubectl get service
