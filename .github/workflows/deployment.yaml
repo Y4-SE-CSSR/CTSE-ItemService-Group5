@@ -125,7 +125,7 @@ jobs:
         run: az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_AKS_NAME }}
 
       - name: Deploy to Azure Kubernetes Cluster
-        run: kubectl apply -f kubernetes/
+        run: kubectl apply -f kubernetes/deployment.yaml
 
       - name: Get service IP
         run: kubectl get service
