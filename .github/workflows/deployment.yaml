@@ -133,5 +133,8 @@ jobs:
       - name: Deploy to Azure Kubernetes Cluster
         run: kubectl apply -f kubernetes/
 
+      - name: Expose service
+        run: kubectl expose deployment item-service-deployment --type=LoadBalancer --port=8080 --target-port=8080
+
       - name: Get service IP
         run: kubectl get service
