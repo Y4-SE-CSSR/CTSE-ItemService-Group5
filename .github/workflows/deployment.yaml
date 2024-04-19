@@ -106,9 +106,6 @@ jobs:
       - name: Set Azure subscription
         run: az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # - name: Create Azure Container Registry
-      #   run: az acr create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_ACR_NAME }} --sku Basic
-
       - name: Login to Azure Container Registry
         run: az acr login --name ${{ secrets.AZURE_ACR_NAME }}
 
