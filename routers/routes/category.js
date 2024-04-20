@@ -133,4 +133,44 @@ router.put("/update/:id", updateCategory);
  */
 router.delete("/delete/:id", deleteCategory);
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier of the category
+ *         name:
+ *           type: string
+ *           description: Name of the category
+ *         description:
+ *           type: string
+ *           description: Description of the category
+ *         createdOn:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the category was created
+ *         updatedOn:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the category was last updated
+ *       required:
+ *         - name
+ *         - description
+ *     CategoryInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Name of the category
+ *         description:
+ *           type: string
+ *           description: Description of the category
+ *       required:
+ *         - name
+ *         - description
+ */
 export default router;
