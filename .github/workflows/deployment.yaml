@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Install Snyk CLI
         run: npm install -g snyk
@@ -53,9 +53,25 @@ jobs:
           name: snyk-report
           path: snyk_report_download
 
+  SecretScan:
+    needs: BuildandTest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install GitLeaks
+        run: |
+          wget https://github.com/zricethezav/gitleaks/releases/download/v7.1.0/gitleaks-linux-amd64.tar.gz
+          tar -xvf gitleaks-linux-amd64.tar.gz
+          sudo mv gitleaks /usr/local/bin/
+          
+      - name: Scan for Secrets
+        run: gitleaks --path="./" --verbose
+        
   Dockerize:
     runs-on: ubuntu-latest
-    needs: SnykSecurityScan
+    needs: [SnykSecurityScan,SecretScan]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
