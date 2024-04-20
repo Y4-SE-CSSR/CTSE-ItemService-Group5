@@ -62,12 +62,12 @@ jobs:
 
       - name: Install GitLeaks
         run: |
-          wget https://github.com/zricethezav/gitleaks/releases/download/v7.4.1/gitleaks-linux-amd64
-          tar -xvf gitleaks-linux-amd64.tar.gz
-          sudo mv gitleaks /usr/local/bin/
+          wget -O git-leaks https://github.com/zricethezav/gitleaks/releases/download/v7.4.1/gitleaks-linux-amd64
+          chmod +x git-leaks
+          sudo mv git-leaks /usr/local/bin/
           
       - name: Scan for Secrets
-        run: gitleaks --path="./" --verbose
+        run: git-leaks --path="./" --verbose
         
   Dockerize:
     runs-on: ubuntu-latest
