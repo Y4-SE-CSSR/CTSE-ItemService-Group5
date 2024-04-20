@@ -1,10 +1,9 @@
 /**
  * @swagger
  * tags:
- *   name: Items
- *   description: Items management
+ *   name: Item
+ *   description: Item management
  */
-
 
 import express from "express";
 import {
@@ -13,9 +12,7 @@ import {
   updateItem,
   deleteItem,
   getOneItem,
-  getItemsByCategory,
   getItemsByBrand,
-  getTopRatingItems,
   getItemsBySearch,
 } from "../../controllers/item.js";
 
@@ -26,7 +23,7 @@ const router = express.Router();
  * /api/items:
  *   get:
  *     summary: Retrieve a list of items
- *     tags: [Items]
+ *     tags: [Item]
  *     responses:
  *       200:
  *         description: List of items
@@ -44,7 +41,7 @@ router.get("/", getItems);
  * /api/items/{id}:
  *   get:
  *     summary: Retrieve an item by ID
- *     tags: [Items]
+ *     tags: [Item]
  *     parameters:
  *       - in: path
  *         name: id
@@ -69,7 +66,7 @@ router.get("/:id", getOneItem);
  * /api/items/create:
  *   post:
  *     summary: Create a new item
- *     tags: [Items]
+ *     tags: [Item]
  *     requestBody:
  *       required: true
  *       content:
@@ -91,7 +88,7 @@ router.post("/create", createItem);
  * /api/items/update/{id}:
  *   put:
  *     summary: Update an item by ID
- *     tags: [Items]
+ *     tags: [Item]
  *     parameters:
  *       - in: path
  *         name: id
@@ -122,7 +119,7 @@ router.put("/update/:id", updateItem);
  * /api/items/delete/{id}:
  *   delete:
  *     summary: Delete an item by ID
- *     tags: [Items]
+ *     tags: [Item]
  *     parameters:
  *       - in: path
  *         name: id
@@ -140,35 +137,10 @@ router.delete("/delete/:id", deleteItem);
 
 /**
  * @swagger
- * /api/items/category/{category}:
- *   get:
- *     summary: Retrieve items by category
- *     tags: [Items]
- *     parameters:
- *       - in: path
- *         name: category
- *         required: true
- *         description: Name of the category
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: List of items
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Item'
- */
-router.get("/category/:category", getItemsByCategory);
-
-/**
- * @swagger
  * /api/items/brand/{brand}:
  *   get:
  *     summary: Retrieve items by brand
- *     tags: [Items]
+ *     tags: [Item]
  *     parameters:
  *       - in: path
  *         name: brand
@@ -190,28 +162,10 @@ router.get("/brand/:brand", getItemsByBrand);
 
 /**
  * @swagger
- * /api/items/get/top:
- *   get:
- *     summary: Retrieve top rating items
- *     tags: [Items]
- *     responses:
- *       200:
- *         description: List of top rating items
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Item'
- */
-router.get("/get/top", getTopRatingItems);
-
-/**
- * @swagger
  * /api/items/search/{search}:
  *   get:
  *     summary: Search items by keyword
- *     tags: [Items]
+ *     tags: [Item]
  *     parameters:
  *       - in: path
  *         name: search
@@ -230,5 +184,62 @@ router.get("/get/top", getTopRatingItems);
  *                 $ref: '#/components/schemas/Item'
  */
 router.get("/search/:search", getItemsBySearch);
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Item:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier of the item
+ *         name:
+ *           type: string
+ *           description: Name of the item
+ *         description:
+ *           type: string
+ *           description: Description of the item
+ *         price:
+ *           type: number
+ *           description: Price of the item
+ *         brand:
+ *           type: string
+ *           description: Brand of the item
+ *         category:
+ *           type: string
+ *           description: ID of the category the item belongs to
+ *       required:
+ *         - name
+ *         - description
+ *         - price
+ *         - brand
+ *         - category
+ *     ItemInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Name of the item
+ *         description:
+ *           type: string
+ *           description: Description of the item
+ *         price:
+ *           type: number
+ *           description: Price of the item
+ *         brand:
+ *           type: string
+ *           description: Brand of the item
+ *         category:
+ *           type: string
+ *           description: ID of the category the item belongs to
+ *       required:
+ *         - name
+ *         - description
+ *         - price
+ *         - brand
+ *         - category
+ */
 
 export default router;

@@ -52,15 +52,6 @@ export const getOneItem = async (req, res) => {
     }
 }
 
-//get top 10 rating items
-export const getTopRatingItems = async (req, res) => {
-    try {
-        const items = await Item.find().sort({ rating: -1 }).limit(10);
-        res.status(200).json(items);
-    } catch (error) {
-        res.status(409).json({ message: error.message });
-    }
-}
 
 //get all items by category
 export const getItemsByCategory = async (req, res) => {

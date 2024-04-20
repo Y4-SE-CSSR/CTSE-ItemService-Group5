@@ -19,17 +19,10 @@ const router = express.Router();
 
 /**
  * @swagger
- * tags:
- *   name: Reviews
- *   description: Review management
- */
-
-/**
- * @swagger
  * /api/reviews:
  *   get:
  *     summary: Retrieve a list of reviews
- *     tags: [Reviews]
+ *     tags: [Review]
  *     responses:
  *       200:
  *         description: List of reviews
@@ -47,7 +40,7 @@ router.get("/", getReviews);
  * /api/reviews/{id}:
  *   get:
  *     summary: Retrieve a review by ID
- *     tags: [Reviews]
+ *     tags: [Review]
  *     parameters:
  *       - in: path
  *         name: id
@@ -72,7 +65,7 @@ router.get("/:id", getOneReview);
  * /api/reviews/create:
  *   post:
  *     summary: Create a new review
- *     tags: [Reviews]
+ *     tags: [Review]
  *     requestBody:
  *       required: true
  *       content:
@@ -94,7 +87,7 @@ router.post("/create", createReview);
  * /api/reviews/update/{id}:
  *   put:
  *     summary: Update a review by ID
- *     tags: [Reviews]
+ *     tags: [Review]
  *     parameters:
  *       - in: path
  *         name: id
@@ -125,7 +118,7 @@ router.put("/update/:id", updateReview);
  * /api/reviews/delete/{id}:
  *   delete:
  *     summary: Delete a review by ID
- *     tags: [Reviews]
+ *     tags: [Review]
  *     parameters:
  *       - in: path
  *         name: id
@@ -146,7 +139,7 @@ router.delete("/delete/:id", deleteReview);
  * /api/reviews/item/{id}:
  *   get:
  *     summary: Retrieve reviews by item ID
- *     tags: [Reviews]
+ *     tags: [Review]
  *     parameters:
  *       - in: path
  *         name: id
@@ -166,5 +159,53 @@ router.delete("/delete/:id", deleteReview);
  */
 router.get("/item/:id", getReviewsByItem);
 
-export default router;
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Review:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier of the review
+ *         item:
+ *           type: string
+ *           description: ID of the item being reviewed
+ *         rating:
+ *           type: number
+ *           description: Rating of the review (from 1 to 5)
+ *         comment:
+ *           type: string
+ *           description: Comment of the review
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the review was created
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the review was last updated
+ *       required:
+ *         - item
+ *         - rating
+ *         - comment
+ *     ReviewInput:
+ *       type: object
+ *       properties:
+ *         item:
+ *           type: string
+ *           description: ID of the item being reviewed
+ *         rating:
+ *           type: number
+ *           description: Rating of the review (from 1 to 5)
+ *         comment:
+ *           type: string
+ *           description: Comment of the review
+ *       required:
+ *         - item
+ *         - rating
+ *         - comment
+ */
 
+export default router;

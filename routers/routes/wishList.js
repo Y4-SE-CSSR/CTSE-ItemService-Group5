@@ -19,12 +19,6 @@ import {
 
 const router = express.Router();
 
-/**
- * @swagger
- * tags:
- *   name: WishList
- *   description: Wishlist management
- */
 
 /**
  * @swagger
@@ -186,12 +180,7 @@ router.delete("/:id", deleteWishList);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               itemId:
- *                 type: string
- *             required:
- *               - itemId
+ *             $ref: '#/components/schemas/AddItemToWishListInput'
  *     responses:
  *       200:
  *         description: Item added to wishlist successfully
@@ -222,12 +211,7 @@ router.put("/:id/addItem", addItemToWishList);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               itemId:
- *                 type: string
- *             required:
- *               - itemId
+ *             $ref: '#/components/schemas/RemoveItemFromWishListInput'
  *     responses:
  *       200:
  *         description: Item removed from wishlist successfully
@@ -240,5 +224,58 @@ router.put("/:id/addItem", addItemToWishList);
  */
 router.put("/:id/removeItem", removeItemFromWishList);
 
-export default router;
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     WishList:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier of the wishlist
+ *         userId:
+ *           type: string
+ *           description: ID of the user who owns the wishlist
+ *         items:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: IDs of the items in the wishlist
+ *         createdOn:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the wishlist was created
+ *         updatedOn:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the wishlist was last updated
+ *       required:
+ *         - userId
+ *     WishListInput:
+ *       type: object
+ *       properties:
+ *         userId:
+ *           type: string
+ *           description: ID of the user who owns the wishlist
+ *       required:
+ *         - userId
+ *     AddItemToWishListInput:
+ *       type: object
+ *       properties:
+ *         itemId:
+ *           type: string
+ *           description: ID of the item to add to the wishlist
+ *       required:
+ *         - itemId
+ *     RemoveItemFromWishListInput:
+ *       type: object
+ *       properties:
+ *         itemId:
+ *           type: string
+ *           description: ID of the item to remove from the wishlist
+ *       required:
+ *         - itemId
+ */
 
+export default router;
