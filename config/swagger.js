@@ -2,13 +2,13 @@ export const options = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Swagger API',
+            title: 'Swagger API - CTSE Item Service',
             version: '1.0.0',
-            description: 'A simple express library',
+            description: 'API Documentation for CTSE Item Service',
         },
         servers: [
             {
-                url: 'http://localhost:8080',
+                url: 'http://172.171.69.245:8080',
             },
         ],
     },
