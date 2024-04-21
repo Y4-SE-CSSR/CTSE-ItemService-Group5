@@ -11,5 +11,5 @@
 ### Kubernetes
 ### Azure Container Registry
 ### Azure Kubernetes Service
-### Snyk Secret Scan 
+### Snyk Security Scan
 ### Git Leaks
