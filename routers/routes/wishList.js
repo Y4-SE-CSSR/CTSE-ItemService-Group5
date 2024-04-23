@@ -222,7 +222,7 @@ router.put("/:id/addItem", addItemToWishList);
  *       404:
  *         description: Wishlist not found
  */
-router.put("/:id/removeItem", removeItemFromWishList);
+// router.put("/:id/removeItem", removeItemFromWishList);
 
 /**
  * @swagger
